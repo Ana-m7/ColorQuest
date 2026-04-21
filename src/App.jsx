@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { randomColor } from './utils/colorUtils'
 import ColorDisplay from './components/ColorDisplay'
 import RoundTracker from './components/RoundTracker'
+import ColorPicker from './components/ColorPicker'
 import './index.css'
 
 const TOTAL_ROUNDS = 5
@@ -10,6 +11,7 @@ function App() {
   const [phase, setPhase] = useState('home')
   const [targetColor, setTargetColor] = useState(null)
   const [currentRound, setCurrentRound] = useState(1)
+  const [pickedColor, setPickedColor] = useState({ r: 255, g: 255, b: 255 })
 
   function startGame() {
     setCurrentRound(1)
@@ -68,12 +70,23 @@ function App() {
       {phase === 'guess' && (
         <>
           <RoundTracker currentRound={currentRound} totalRounds={TOTAL_ROUNDS} />
-          <div>
-            <p style={{ color: '#aaa', fontSize: '1.2rem' }}>Now pick the colour you saw!</p>
-            <p style={{ color: '#555', marginTop: '0.5rem', fontSize: '0.9rem' }}>
-              (colour wheel coming next)
-            </p>
-          </div>
+          <ColorPicker onColorChange={setPickedColor} />
+          <button
+            onClick={() => alert(`You picked ${JSON.stringify(pickedColor)}`)}
+            style={{
+              marginTop: '2rem',
+              padding: '12px 32px',
+              fontSize: '1rem',
+              background: '#fff',
+              color: '#000',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              letterSpacing: '1px'
+            }}>
+            Verify
+          </button>
         </>
       )}
 
