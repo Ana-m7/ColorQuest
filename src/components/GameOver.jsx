@@ -1,5 +1,19 @@
-function GameOver({ scores, onRestart }) {
-  const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+function GameOver({ scores = [], onRestart }) {
+  if (!scores || scores.length === 0) {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <p style={{ color: '#aaa' }}>No scores yet.</p>
+        <button onClick={onRestart} style={{
+          marginTop: '1rem', padding: '12px 32px',
+          fontSize: '1rem', background: '#fff', color: '#000',
+          border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold'
+        }}>Play Again</button>
+      </div>
+    )
+  }
+
+  const safeScores = Array.isArray(scores) ? scores : []
+  const avg = safeScores.length > 0 ? Math.round(safeScores.reduce((a, b) => a + b, 0) / safeScores.length) : 0
 
   function getVerdict(avg) {
     if (avg >= 80) return { text: '🎨 Colour Master', color: '#22c55e' }
@@ -17,45 +31,31 @@ function GameOver({ scores, onRestart }) {
       </p>
 
       <div style={{
-        background: '#1a1a1a',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #2a2a2a',
-        marginBottom: '1.5rem'
+        background: '#1a1a1a', borderRadius: '16px',
+        padding: '1.5rem', border: '1px solid #2a2a2a', marginBottom: '1.5rem'
       }}>
         <p style={{ color: '#555', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1rem' }}>
           ROUND SCORES
         </p>
         {scores.map((score, i) => (
           <div key={i} style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '10px'
+            display: 'flex', justifyContent: 'space-between',
+            alignItems: 'center', marginBottom: '10px'
           }}>
             <span style={{ color: '#555', fontSize: '0.85rem' }}>Round {i + 1}</span>
             <div style={{
-              flex: 1,
-              height: '4px',
-              background: '#222',
-              margin: '0 12px',
-              borderRadius: '4px',
-              overflow: 'hidden'
+              flex: 1, height: '4px', background: '#222',
+              margin: '0 12px', borderRadius: '4px', overflow: 'hidden'
             }}>
               <div style={{
-                height: '100%',
-                width: `${score}%`,
+                height: '100%', width: `${score}%`,
                 background: score >= 80 ? '#22c55e' : score >= 60 ? '#eab308' : '#ef4444',
-                borderRadius: '4px',
-                transition: 'width 0.6s ease'
+                borderRadius: '4px', transition: 'width 0.6s ease'
               }} />
             </div>
             <span style={{
               color: score >= 80 ? '#22c55e' : score >= 60 ? '#eab308' : '#ef4444',
-              fontSize: '0.9rem',
-              fontWeight: 'bold',
-              minWidth: '40px',
-              textAlign: 'right'
+              fontSize: '0.9rem', fontWeight: 'bold', minWidth: '40px', textAlign: 'right'
             }}>
               {score}%
             </span>
@@ -63,11 +63,8 @@ function GameOver({ scores, onRestart }) {
         ))}
 
         <div style={{
-          borderTop: '1px solid #2a2a2a',
-          marginTop: '1rem',
-          paddingTop: '1rem',
-          display: 'flex',
-          justifyContent: 'space-between'
+          borderTop: '1px solid #2a2a2a', marginTop: '1rem', paddingTop: '1rem',
+          display: 'flex', justifyContent: 'space-between'
         }}>
           <span style={{ color: '#aaa', letterSpacing: '2px', fontSize: '0.85rem' }}>AVERAGE</span>
           <span style={{ color: verdict.color, fontWeight: 'bold', fontSize: '1.1rem' }}>{avg}%</span>
@@ -75,15 +72,9 @@ function GameOver({ scores, onRestart }) {
       </div>
 
       <button onClick={onRestart} style={{
-        padding: '12px 32px',
-        fontSize: '1rem',
-        background: '#fff',
-        color: '#000',
-        border: 'none',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontWeight: 'bold',
-        letterSpacing: '1px'
+        padding: '12px 32px', fontSize: '1rem', background: '#fff',
+        color: '#000', border: 'none', borderRadius: '8px',
+        cursor: 'pointer', fontWeight: 'bold', letterSpacing: '1px'
       }}>
         Play Again
       </button>

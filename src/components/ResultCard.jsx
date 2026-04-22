@@ -1,5 +1,6 @@
 function GameOver({ scores, onRestart }) {
-  const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+  const safeScores = Array.isArray(scores) ? scores : []
+  const avg = safeScores.length > 0 ? Math.round(safeScores.reduce((a, b) => a + b, 0) / safeScores.length) : 0
 
   function getVerdict(avg) {
     if (avg >= 80) return { text: '🎨 Colour Master', color: '#22c55e' }
@@ -26,7 +27,7 @@ function GameOver({ scores, onRestart }) {
         <p style={{ color: '#555', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1rem' }}>
           ROUND SCORES
         </p>
-        {scores.map((score, i) => (
+        {safeScores.map((score, i) => (
           <div key={i} style={{
             display: 'flex',
             justifyContent: 'space-between',
