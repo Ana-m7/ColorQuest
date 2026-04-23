@@ -1,81 +1,37 @@
-function GameOver({ scores = [], onRestart }) {
-  if (!scores || scores.length === 0) {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <p style={{ color: '#aaa' }}>No scores yet.</p>
-        <button onClick={onRestart} style={{
-          marginTop: '1rem', padding: '12px 32px',
-          fontSize: '1rem', background: '#fff', color: '#000',
-          border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold'
-        }}>Play Again</button>
-      </div>
-    )
-  }
+import { rgbToHex } from '../utils/colorUtils'
 
+function GameOver({ scores, targetColors, pickedColors, onRestart }) {
   const safeScores = Array.isArray(scores) ? scores : []
-  const avg = safeScores.length > 0 ? Math.round(safeScores.reduce((a, b) => a + b, 0) / safeScores.length) : 0
-
-  function getVerdict(avg) {
-    if (avg >= 80) return { text: '🎨 Colour Master', color: '#22c55e' }
-    if (avg >= 60) return { text: '👁️ Sharp Eye', color: '#eab308' }
-    return { text: '🎯 Keep Practising', color: '#ef4444' }
-  }
-
-  const verdict = getVerdict(avg)
 
   return (
-    <div style={{ textAlign: 'center', maxWidth: '360px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', letterSpacing: '4px', marginBottom: '0.5rem' }}>GAME OVER</h2>
-      <p style={{ color: verdict.color, fontSize: '1.1rem', letterSpacing: '2px', marginBottom: '2rem' }}>
-        {verdict.text}
-      </p>
-
-      <div style={{
-        background: '#1a1a1a', borderRadius: '16px',
-        padding: '1.5rem', border: '1px solid #2a2a2a', marginBottom: '1.5rem'
-      }}>
-        <p style={{ color: '#555', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1rem' }}>
-          ROUND SCORES
-        </p>
-        {scores.map((score, i) => (
-          <div key={i} style={{
-            display: 'flex', justifyContent: 'space-between',
-            alignItems: 'center', marginBottom: '10px'
-          }}>
-            <span style={{ color: '#555', fontSize: '0.85rem' }}>Round {i + 1}</span>
-            <div style={{
-              flex: 1, height: '4px', background: '#222',
-              margin: '0 12px', borderRadius: '4px', overflow: 'hidden'
-            }}>
-              <div style={{
-                height: '100%', width: `${score}%`,
-                background: score >= 80 ? '#22c55e' : score >= 60 ? '#eab308' : '#ef4444',
-                borderRadius: '4px', transition: 'width 0.6s ease'
-              }} />
+    <div style={{ textAlign: 'center', maxWidth: '480px', margin: '0 auto' }}>
+      <h2 style={{ fontSize: '1.5rem', letterSpacing: '4px', marginBottom: '2rem' }}>YOUR RESULTS</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '2rem' }}>
+        {safeScores.map((score, i) => {
+          const targetHex = targetColors?.[i] ? rgbToHex(targetColors[i]) : '#333'
+          const pickedHex = pickedColors?.[i] ? rgbToHex(pickedColors[i]) : '#333'
+          return (
+            <div key={i} style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #2a2a2a' }}>
+              <div style={{ display: 'flex', height: '70px' }}>
+                <div style={{ flex: 1, backgroundColor: targetHex, display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-start', padding: '6px 10px' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.7)', background: 'rgba(0,0,0,0.4)', padding: '2px 6px', borderRadius: '4px' }}>TARGET</span>
+                </div>
+                <div style={{ flex: 1, backgroundColor: pickedHex, display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', padding: '6px 10px' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.7)', background: 'rgba(0,0,0,0.4)', padding: '2px 6px', borderRadius: '4px' }}>YOUR PICK</span>
+                </div>
+              </div>
+              <div style={{ background: '#1a1a1a', padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: '#555', fontSize: '0.8rem' }}>ROUND {i + 1}</span>
+                <div style={{ flex: 1, height: '4px', background: '#222', margin: '0 12px', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: score + '%', background: score >= 80 ? '#22c55e' : score >= 60 ? '#eab308' : '#ef4444', borderRadius: '4px' }} />
+                </div>
+                <span style={{ fontWeight: 'bold', fontSize: '0.9rem', minWidth: '40px', textAlign: 'right', color: score >= 80 ? '#22c55e' : score >= 60 ? '#eab308' : '#ef4444' }}>{score}%</span>
+              </div>
             </div>
-            <span style={{
-              color: score >= 80 ? '#22c55e' : score >= 60 ? '#eab308' : '#ef4444',
-              fontSize: '0.9rem', fontWeight: 'bold', minWidth: '40px', textAlign: 'right'
-            }}>
-              {score}%
-            </span>
-          </div>
-        ))}
-
-        <div style={{
-          borderTop: '1px solid #2a2a2a', marginTop: '1rem', paddingTop: '1rem',
-          display: 'flex', justifyContent: 'space-between'
-        }}>
-          <span style={{ color: '#aaa', letterSpacing: '2px', fontSize: '0.85rem' }}>AVERAGE</span>
-          <span style={{ color: verdict.color, fontWeight: 'bold', fontSize: '1.1rem' }}>{avg}%</span>
-        </div>
+          )
+        })}
       </div>
-
-      <button onClick={onRestart} style={{
-        padding: '12px 32px', fontSize: '1rem', background: '#fff',
-        color: '#000', border: 'none', borderRadius: '8px',
-        cursor: 'pointer', fontWeight: 'bold', letterSpacing: '1px'
-      }}>
+      <button onClick={onRestart} style={{ padding: '12px 32px', fontSize: '1rem', background: '#fff', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
         Play Again
       </button>
     </div>

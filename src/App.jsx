@@ -16,25 +16,32 @@ function App() {
   const [pickedColor, setPickedColor] = useState({ r: 255, g: 255, b: 255 })
   const [scores, setScores] = useState([])
   const [lastScore, setLastScore] = useState(null)
+  const [targetColors, setTargetColors] = useState([])
+  const [pickedColors, setPickedColors] = useState([])
 
   function startGame() {
-    setCurrentRound(1)
-    setScores([])
-    setLastScore(null)
-    setTargetColor(randomColor())
-    setPhase('memorise')
-  }
+  setCurrentRound(1)
+  setScores([])
+  setTargetColors([])
+  setPickedColors([])
+  setLastScore(null)
+  setPickedColor({ r: 128, g: 128, b: 128 })
+  setTargetColor(randomColor())
+  setPhase('memorise')
+}
 
   function handleTimeUp() {
     setPhase('guess')
   }
 
   function handleVerify() {
-    const score = colorSimilarity(targetColor, pickedColor)
-    setLastScore(score)
-    setScores(prev => [...prev, score])
-    setPhase('result')
-  }
+  const score = colorSimilarity(targetColor, pickedColor)
+  setLastScore(score)
+  setScores(prev => [...prev, score])
+  setTargetColors(prev => [...prev, targetColor])
+  setPickedColors(prev => [...prev, pickedColor])
+  setPhase('result')
+}
 
   function handleNext() {
     if (currentRound >= TOTAL_ROUNDS) {
@@ -139,8 +146,8 @@ function App() {
       )}
 
       {phase === 'gameover' && (
-        <GameOver scores={scores} onRestart={startGame} />
-      )}
+  <GameOver scores={scores} targetColors={targetColors} pickedColors={pickedColors} onRestart={startGame} />
+)}
 
     </div>
   )
