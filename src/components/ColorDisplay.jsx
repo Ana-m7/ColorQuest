@@ -28,16 +28,15 @@ function ColorDisplay({ color, onTimeUp }) {
         MEMORISE THIS COLOUR
       </p>
       <div style={{
-        width: '260px',
-        height: '260px',
+        width: '320px',
+        height: '200px',
         borderRadius: '16px',
+        boxShadow: `0 0 20px ${hex}55`,
         backgroundColor: hex,
         margin: '0 auto',
-        boxShadow: `0 0 60px ${hex}`,
+        
       }} />
-      <p style={{ marginTop: '1.2rem', fontSize: '1rem', color: '#ccc', letterSpacing: '3px' }}>
-        {hex}
-      </p>
+      
       <p style={{ marginTop: '0.5rem', fontSize: '2rem', fontWeight: 'bold' }}>
         {timeLeft}s
       </p>
