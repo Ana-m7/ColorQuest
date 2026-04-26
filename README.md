@@ -36,4 +36,4 @@ npm run dev
 
 ## Live Demo
 
-[Play ColorQuest →](https://your-vercel-link-here.vercel.app)
+[Play ColorQuest →](https://color-quest-sigma.vercel.app/)
